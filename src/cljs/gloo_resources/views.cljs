@@ -1,6 +1,7 @@
 (ns gloo-resources.views
   (:require cljsjs.handsontable
             [re-frame.core :as rf]
+            [gloo-resources.queries :as queries]
             [cljsjs.auth0-lock]
             [reagent.core :as reagent]
             [re-com.core :as re-com]))
@@ -31,36 +32,37 @@
       :on-click #(.show lock)}
      "Log in"]))
 
-(def resources-query "
-  {
-    allResources {
-      url
-      name
-      branch
-      endDate
-      engineer
-      startDate
-    }
-  }")
-
 (defn table [resources]
   (reagent/create-class
     {:component-did-mount
      (fn []
-       (let [dom-node (js/document.querySelector "#table")]
-         (js/Handsontable.
-           dom-node
-           #js {:data       (clj->js resources)
-                :rowHeaders false
-                :colHeaders #js ["Site-Name"
-                                 "Engineer"
-                                 "Start"
-                                 "Finish"
-                                 "Branch"
-                                 "Last-DB-load"]})))
+       (let [re-assign-symbol "[x]"
+             cols #js ["name"
+                       "endDate"
+                       "url"
+                       "branch"
+                       "engineer"
+                       "startDate"
+                       "re-assign"]
+             dom-node (js/document.querySelector "#table")
+             resources (map #(assoc % :re-assign re-assign-symbol) resources)
+             columns (map #(hash-map :data % :readOnly true :renderer "html") cols)
+             htable (js/Handsontable.
+                      dom-node
+                      #js {:data       (clj->js resources)
+                           :rowHeaders false
+                           :colHeaders cols
+                           :columns    (clj->js columns)
+                           :afterSelection (fn [r c]
+                                             (this-as this-js
+                                               (let [col-info (js->clj (.getDataAtCol this-js c))
+                                                     row-info (js->clj (.getDataAtRow this-js r))]
+                                                 (when (some #(= re-assign-symbol %) col-info)
+                                                   (prn row-info)))))})]))
+
 
      :display-name
-     "resources-table-component"                             ;; for more helpful warnings & errors
+     "resources-table-component"                              ;; for more helpful warnings & errors
 
      :reagent-render
      (fn []
@@ -110,7 +112,7 @@
     [:div]))
 
 (defn main-panel []
-  (rf/dispatch [:fetch-graph :allResources resources-query])
+  (rf/dispatch [:fetch-graph :allResources queries/resources])
   (let [active-panel (rf/subscribe [:active-panel])
         allResources (rf/subscribe [:allResources])]
     (fn []

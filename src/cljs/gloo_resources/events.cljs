@@ -4,6 +4,7 @@
             [day8.re-frame.http-fx]
             [gloo-resources.db :as db]))
 
+;; DEV KEY
 (def GRAPHQL_API_KEY "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MDg1MTQ1MDksImNsaWVudElkIjoiY2o1aXozaHRsNzRtdDAxMjJjN3Z0d3BlOSIsInByb2plY3RJZCI6ImNqOTAxdmgzajBidXkwMTIyc3h6eXJlcG4iLCJwZXJtYW5lbnRBdXRoVG9rZW5JZCI6ImNqOTAybDljcjBkNTAwMTIyNTQwNjVscGIifQ.SS5eZxBLkXqK3my9mdGDzWn-Ch-X6Gn1rru8XvVrQO4")
 
 (def graphql-endpoint "https://api.graph.cool/simple/v1/cj901vh3j0buy0122sxzyrepn")
@@ -21,7 +22,6 @@
 (rf/reg-event-fx
   :fetch-graph
   (fn [{db :db} [_ db-node query]]
-    ;; TODO: add loading state...
     {:db         db
      :http-xhrio {:method          :post
                   :headers         {:Authorization (str "Bearer " GRAPHQL_API_KEY)}
@@ -30,7 +30,6 @@
                   :uri             graphql-endpoint
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success      [:fetch-graph-success db-node]}}))
-
 
 (rf/reg-event-db
   :fetch-graph-success
