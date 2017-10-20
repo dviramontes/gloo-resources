@@ -14,11 +14,9 @@
 (def gloo-dev-resources-alloc-token "gloo-dev-resources-alloc-token")
 
 (defn home-title []
-  (let [name (rf/subscribe [:name])]
-    (fn []
-      [re-com/title
-       :label "Development Resource Allocations"
-       :level :level1])))
+  [re-com/title
+   :label "Gloo Development Resource Allocations"
+   :level :level1])
 
 (defn login-btn []
   (let [_ (.on lock
@@ -34,20 +32,24 @@
      "Log in"]))
 
 (defn table []
-  (fn []
+  (let []
     (reagent/create-class
       {:component-did-mount
        (fn []
-         (let [data [["", "Tesla", "Volvo", "Toyota", "Honda"]
-                     ["2017", 10, 11, 12, 13]
-                     ["2018", 20, 11, 14, 13]
-                     ["2019", 30, 15, 12, 13]]
-               node (js/document.querySelector "#table")]
+         (let [data [["2017", 10, 11, 12, 13 12]
+                     ["2018", 20, 11, 14, 13 12]
+                     ["2019", 30, 15, 12, 13 12]]
+               dom-node (js/document.querySelector "#table")]
            (js/Handsontable.
-             node
+             dom-node
              #js {:data       (clj->js data)
-                  :rowHeaders true
-                  :colHeaders true})))
+                  :rowHeaders false
+                  :colHeaders #js ["Site-Name"
+                                   "Engineer"
+                                   "Start"
+                                   "Finish"
+                                   "Branch"
+                                   "Last-DB-load"]})))
 
        :display-name
        "resources-table-component"                             ;; for more helpful warnings & errors
