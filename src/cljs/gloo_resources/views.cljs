@@ -1,8 +1,9 @@
 (ns gloo-resources.views
-  (:require [re-frame.core :as re-frame]
+  (:require cljsjs.handsontable
+            [re-frame.core :as rf]
             [cljsjs.auth0-lock]
+            [reagent.core :as reagent]
             [re-com.core :as re-com]))
-
 
 (def lock
   (new js/Auth0Lock
@@ -13,7 +14,7 @@
 (def gloo-dev-resources-alloc-token "gloo-dev-resources-alloc-token")
 
 (defn home-title []
-  (let [name (re-frame/subscribe [:name])]
+  (let [name (rf/subscribe [:name])]
     (fn []
       [re-com/title
        :label "Development Resource Allocations"
@@ -32,10 +33,44 @@
       :on-click #(.show lock)}
      "Log in"]))
 
+(defn table []
+  (fn []
+    (reagent/create-class
+      {:component-did-mount
+       (fn []
+         (let [data [["", "Tesla", "Volvo", "Toyota", "Honda"]
+                     ["2017", 10, 11, 12, 13]
+                     ["2018", 20, 11, 14, 13]
+                     ["2019", 30, 15, 12, 13]]
+               node (js/document.querySelector "#table")]
+           (js/Handsontable.
+             node
+             #js {:data       (clj->js data)
+                  :rowHeaders true
+                  :colHeaders true})))
+
+       :display-name
+       "resources-table-component"                             ;; for more helpful warnings & errors
+
+       :reagent-render
+       (fn []
+         [:div#table])})))
+
+
+
 (defn home-panel []
   [re-com/v-box
    :gap "1em"
-   :children [[home-title] [login-btn]]])
+   :children [[re-com/box
+               :class "fl w-100 pa2"
+               :child [home-title]]
+              [re-com/box
+               :class "fl w-100 pa2"
+               :child [login-btn]]
+              [re-com/box
+               :class "fl w-100 pa2"
+               :child [table]]]])
+
 
 
 ;; about
@@ -68,7 +103,7 @@
   [panels panel-name])
 
 (defn main-panel []
-  (let [active-panel (re-frame/subscribe [:active-panel])]
+  (let [active-panel (rf/subscribe [:active-panel])]
     (fn []
       [re-com/v-box
        :height "100%"
