@@ -8,6 +8,11 @@
                  [secretary "1.2.3"]
                  [compojure "1.5.0"]
                  [yogthos/config "0.8"]
+                 [cljs-ajax "0.6.0"]
+                 [day8.re-frame/http-fx "0.1.3"]
+                 [cljsjs/auth0 "8.6.0-0"]
+                 [cljsjs/auth0-lock "10.21.1-0"]
+                 [cljsjs/handsontable "0.31.2-0"]
                  [ring "1.4.0"]]
 
   :plugins [[lein-cljsbuild "1.1.5"]
@@ -46,8 +51,8 @@
                     :source-map-timestamp true
                     :preloads             [devtools.preload
                                            re-frisk.preload]
-                    :external-config      {:devtools/config {:features-to-install :all}}
-                    }}
+                    :external-config      {:devtools/config {:features-to-install :all}}}}
+
 
     {:id           "min"
      :source-paths ["src/cljs"]
@@ -63,8 +68,8 @@
      :compiler     {:main          gloo-resources.runner
                     :output-to     "resources/public/js/compiled/test.js"
                     :output-dir    "resources/public/js/compiled/test/out"
-                    :optimizations :none}}
-    ]}
+                    :optimizations :none}}]}
+
 
   :main gloo-resources.server
 
@@ -72,5 +77,5 @@
 
   :uberjar-name "gloo-resources.jar"
 
-  :prep-tasks [["cljsbuild" "once" "min"]["less" "once"] "compile"]
-  )
+  :prep-tasks [["cljsbuild" "once" "min"]["less" "once"] "compile"])
+

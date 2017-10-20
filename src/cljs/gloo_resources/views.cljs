@@ -1,26 +1,41 @@
 (ns gloo-resources.views
   (:require [re-frame.core :as re-frame]
+            [cljsjs.auth0-lock]
             [re-com.core :as re-com]))
 
 
-;; home
+(def lock
+  (new js/Auth0Lock
+       "UF8w9E28EPVedKxIzLmW1XiSnd9Dupxq"
+       "pl-switchboard.auth0.com"
+       (clj->js {:auth {:redirect false}})))
+
+(def gloo-dev-resources-alloc-token "gloo-dev-resources-alloc-token")
 
 (defn home-title []
   (let [name (re-frame/subscribe [:name])]
     (fn []
       [re-com/title
-       :label (str "Hello from " @name ". This is the Home Page.")
+       :label "Development Resource Allocations"
        :level :level1])))
 
-(defn link-to-about-page []
-  [re-com/hyperlink-href
-   :label "go to About Page"
-   :href "#/about"])
+(defn login-btn []
+  (let [_ (.on lock
+               "authenticated"
+               (fn [profile]
+                 (let [token (aget profile "accessToken")]
+                   (js/window.localStorage.setItem
+                     gloo-dev-resources-alloc-token
+                     token))))]
+    [:button.btn.btn-login.btn-sm
+     {:type     "button"
+      :on-click #(.show lock)}
+     "Log in"]))
 
 (defn home-panel []
   [re-com/v-box
    :gap "1em"
-   :children [[home-title] [link-to-about-page]]])
+   :children [[home-title] [login-btn]]])
 
 
 ;; about
