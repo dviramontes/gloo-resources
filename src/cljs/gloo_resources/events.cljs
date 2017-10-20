@@ -19,8 +19,8 @@
    (assoc db :active-panel active-panel)))
 
 (rf/reg-event-fx
-  :get-profile-data
-  (fn [{db :db} [_ query]]
+  :fetch-graph
+  (fn [{db :db} [_ db-node query]]
     ;; TODO: add loading state...
     {:db         db
      :http-xhrio {:method          :post
@@ -29,11 +29,10 @@
                   :params          {:query query}
                   :uri             graphql-endpoint
                   :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success      [:get-success]}}))
+                  :on-success      [:fetch-graph-success db-node]}}))
 
 
 (rf/reg-event-db
-  :get-success
-  (fn [db [_ & [{data :data}]]]
-    (prn db)
-    db))
+  :fetch-graph-success
+  (fn [db [_ db-node & [{data :data}]]]
+    (assoc db db-node (db-node data))))

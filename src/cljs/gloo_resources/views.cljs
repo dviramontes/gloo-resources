@@ -31,36 +31,45 @@
       :on-click #(.show lock)}
      "Log in"]))
 
-(defn table []
-  (let []
-    (reagent/create-class
-      {:component-did-mount
-       (fn []
-         (let [data [["2017", 10, 11, 12, 13 12]
-                     ["2018", 20, 11, 14, 13 12]
-                     ["2019", 30, 15, 12, 13 12]]
-               dom-node (js/document.querySelector "#table")]
-           (js/Handsontable.
-             dom-node
-             #js {:data       (clj->js data)
-                  :rowHeaders false
-                  :colHeaders #js ["Site-Name"
-                                   "Engineer"
-                                   "Start"
-                                   "Finish"
-                                   "Branch"
-                                   "Last-DB-load"]})))
+(def resources-query "
+  {
+    allResources {
+      url
+      name
+      branch
+      endDate
+      engineer
+      startDate
+    }
+  }")
 
-       :display-name
-       "resources-table-component"                             ;; for more helpful warnings & errors
+(defn table [resources]
+  (reagent/create-class
+    {:component-did-mount
+     (fn []
+       (let [dom-node (js/document.querySelector "#table")]
+         (js/Handsontable.
+           dom-node
+           #js {:data       (clj->js resources)
+                :rowHeaders false
+                :colHeaders #js ["Site-Name"
+                                 "Engineer"
+                                 "Start"
+                                 "Finish"
+                                 "Branch"
+                                 "Last-DB-load"]})))
 
-       :reagent-render
-       (fn []
-         [:div#table])})))
+     :display-name
+     "resources-table-component"                             ;; for more helpful warnings & errors
+
+     :reagent-render
+     (fn []
+       [:div#table])}))
 
 
 
-(defn home-panel []
+
+(defn home-panel [resources]
   [re-com/v-box
    :gap "1em"
    :children [[re-com/box
@@ -71,7 +80,7 @@
                :child [login-btn]]
               [re-com/box
                :class "fl w-100 pa2"
-               :child [table]]]])
+               :child [table resources]]]])
 
 
 
@@ -92,21 +101,19 @@
    :gap "1em"
    :children [[about-title] [link-to-home-page]]])
 
-
 ;; main
 
-(defn- panels [panel-name]
+(defn- panels [panel-name resources]
   (case panel-name
-    :home-panel [home-panel]
+    :home-panel [home-panel resources]
     :about-panel [about-panel]
     [:div]))
 
-(defn show-panel [panel-name]
-  [panels panel-name])
-
 (defn main-panel []
-  (let [active-panel (rf/subscribe [:active-panel])]
+  (rf/dispatch [:fetch-graph :allResources resources-query])
+  (let [active-panel (rf/subscribe [:active-panel])
+        allResources (rf/subscribe [:allResources])]
     (fn []
       [re-com/v-box
        :height "100%"
-       :children [[panels @active-panel]]])))
+       :children [[panels @active-panel @allResources]]])))
