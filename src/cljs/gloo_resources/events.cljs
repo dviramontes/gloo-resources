@@ -1,11 +1,13 @@
 (ns gloo-resources.events
+  (:require-macros [adzerk.env :as env])
   (:require [re-frame.core :as rf]
             [ajax.core :as ajax :refer [POST]]
             [day8.re-frame.http-fx]
             [gloo-resources.db :as db]))
 
 ;; DEV KEY
-(def GRAPHQL_API_KEY "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MDg1MTQ1MDksImNsaWVudElkIjoiY2o1aXozaHRsNzRtdDAxMjJjN3Z0d3BlOSIsInByb2plY3RJZCI6ImNqOTAxdmgzajBidXkwMTIyc3h6eXJlcG4iLCJwZXJtYW5lbnRBdXRoVG9rZW5JZCI6ImNqOTAybDljcjBkNTAwMTIyNTQwNjVscGIifQ.SS5eZxBLkXqK3my9mdGDzWn-Ch-X6Gn1rru8XvVrQO4")
+
+(env/def GLOO_GRAPHQL_API_KEY (System/getenv "GLOO_GRAPHQL_API_KEY"))
 
 (def graphql-endpoint "https://api.graph.cool/simple/v1/cj901vh3j0buy0122sxzyrepn")
 
@@ -24,7 +26,7 @@
   (fn [{db :db} [_ db-node query]]
     {:db         db
      :http-xhrio {:method          :post
-                  :headers         {:Authorization (str "Bearer " GRAPHQL_API_KEY)}
+                  :headers         {:Authorization (str "Bearer " GLOO_GRAPHQL_API_KEY)}
                   :format          (ajax/json-request-format)
                   :params          {:query query}
                   :uri             graphql-endpoint
