@@ -12,7 +12,6 @@
                  [day8.re-frame/http-fx "0.1.3"]
                  [cljsjs/auth0 "8.6.0-0"]
                  [cljsjs/auth0-lock "10.21.1-0"]
-                 [cljsjs/handsontable "0.31.2-0"]
                  [adzerk/env "0.4.0"]
                  [ring "1.4.0"]]
 
