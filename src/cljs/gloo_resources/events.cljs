@@ -23,10 +23,10 @@
 
 (rf/reg-event-fx
   :fetch-graph
-  (fn [{db :db} [_ db-node query]]
+  (fn [{db :db} [_ db-node query & [token]]]
     {:db         db
      :http-xhrio {:method          :post
-                  :headers         {:Authorization (str "Bearer " GLOO_GRAPHQL_API_KEY)}
+                  :headers         {:Authorization (str "Bearer " (or token GLOO_GRAPHQL_API_KEY))}
                   :format          (ajax/json-request-format)
                   :params          {:query query}
                   :uri             graphql-endpoint
