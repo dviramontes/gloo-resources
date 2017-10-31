@@ -25,10 +25,14 @@
            "re-assign"])
 
 (defn row [contents]
-  [:tr {:class "striped--light-gray"}
-   [:td {:class "pv2 ph3"} contents]
-   [:td {:class "pv2 ph3"} contents]
-   [:td {:class "pv2 ph3"} contents]])
+  (let [{:keys [name engineer branch startDate endDate url]} contents]
+    [:tr {:class "striped--light-gray"}
+     [:td {:class "pv2 ph3"} name]
+     [:td {:class "pv2 ph3"} [:b engineer]]
+     [:td {:class "pv2 ph3"} branch]
+     [:td {:class "pv2 ph3"} startDate]
+     [:td {:class "pv2 ph3"} endDate]
+     [:td {:class "pv2 ph3"} [:a {:href url :target "_blank"} url]]]))
 
 (defn table []
   (rf/dispatch [:fetch-graph db-key query])
@@ -38,11 +42,17 @@
       [:div#table-container
        [:table {:class "collapse ba br2 b--black-10 pv2 ph3"}
         [:tbody
-         [:tr {:class "striped--light-gray"}
-          [:th {:class "pv2 ph3 tl f6 fw6 ttu"} "NAME"]
-          [:th {:class "tr f6 ttu fw6 pv2 ph3"} "END_DATE"]
-          [:th {:class "tr f6 ttu fw6 pv2 ph3"} "URL"]]
-         [row "test"]]]])))
+         [:tr {:class "striped--light-gray ba bw2"}
+          [:th {:class "pv2 ph3 tl f6 fw6 ttu ba"} "NAME"]
+          [:th {:class "pv2 ph3 tl f6 fw6 ttu ba"} "ENGINEER"]
+          [:th {:class "tr f6 ttu fw6 pv2 ph3 ba"} "BRANCH"]
+          [:th {:class "tr f6 ttu fw6 pv2 ph3 ba"} "START_DATE"]
+          [:th {:class "tr f6 ttu fw6 pv2 ph3 ba"} "END_DATE"]
+          [:th {:class "tr f6 ttu fw6 pv2 ph3 ba"} "URL"]
+          [:th {:class "tr f6 ttu fw6 pv2 ph3 ba"} "STATUS"]]
+         (for [r @resources-subs]
+           ^{:key (gensym "row-")}
+           [row r])]]])))
 
 
 
