@@ -23,14 +23,14 @@
              gloo-dev-resources-alloc-token
              token)))))
 
-(defn home-title []
+(defn title []
   [re-com/title
    :label "Gloo Development Resource Allocations"
    :level :level1])
 
 (defn login-btn []
-  [:button.btn.btn-login.btn-sm
-   {:type     "button"
+  [:a
+   {:class "f6 link dim br1 ba bw2 ph3 pv2 mb2 dib light-purple"
     :on-click #(.show lock)}
    "Log in"])
 
@@ -38,13 +38,13 @@
   [re-com/v-box
    :gap "1em"
    :children [[re-com/box
-               :class "fl w-100 pa2"
-               :child [home-title]]
+               :class "fl center"
+               :child [title]]
               [re-com/box
-               :class "fl w-100 pa2"
+               :class "fl center"
                :child [login-btn]]
               [re-com/box
-               :class "fl w-100 pa2"
+               :class "fl center"
                :child [table]]]])
 
 ;; about
