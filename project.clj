@@ -12,6 +12,8 @@
                  [day8.re-frame/http-fx "0.1.3"]
                  [cljsjs/auth0 "8.6.0-0"]
                  [cljsjs/auth0-lock "10.21.1-0"]
+                 [cljsjs/moment "2.17.1-1"]
+                 [cljsjs/pikaday "1.5.1-2"]
                  [adzerk/env "0.4.0"]
                  [ring "1.4.0"]]
 
