@@ -13,7 +13,7 @@ module.exports.jenkinsInfo = (event, context, callback) => {
         const response = {
             statusCode: 200,
             body: JSON.stringify({
-                message: filteredResources,
+                filteredResources,
                 input: event,
             }),
         };
