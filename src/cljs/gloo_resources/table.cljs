@@ -1,8 +1,7 @@
 (ns gloo-resources.table
-  (:require cljsjs.pikaday
-            cljsjs.moment
-            [re-frame.core :as rf]
-            [reagent.core :as reagent]))
+  (:require [re-frame.core :as rf]
+            [reagent.core :as reagent]
+            [gloo-resources.date-picker :refer [date-picker]]))
 
 (def query "
   {
@@ -17,25 +16,6 @@
   }")
 
 (def db-key :allResources)
-
-(defn date-picker [& [date]]
-  (reagent/create-class
-    {:display-name
-     "date-picker"
-     :component-did-mount
-     (fn [comp]
-       (let [node (reagent/dom-node comp)
-             picker (js/Pikaday. #js {:field node
-                                      :format "D MMM YYYY"
-                                      :onSelect (fn []
-                                                  (this-as this
-                                                    (prn (-> this
-                                                             (.getMoment)
-                                                             (.format "D MMMM YYYY")))))})]))
-
-     :reagent-render
-     (fn []
-       [:input {:type "text"}])}))
 
 (defn claim-resource-btn []
   [:a {:class "f6 link dim ba ph3 pv2 mb2 dib hot-pink"}
@@ -58,7 +38,7 @@
        [:td {:class "pv2 ph3 purple"} [:b engineer]]
        [:td {:class "pv2 ph3 light-green b-navy"} branch]
        [:td {:class "pv2 ph3"} [date-picker]]
-       [:td {:class "pv2 ph3"} endDate]
+       [:td {:class "pv2 ph3"} [date-picker]]
        [:td {:class "pv2 ph3"} [:a {:href url :target "_blank"} url]]
        [:td {:class "pv2 ph3"} "..."]
        [:td {:class "pv2 ph3 actions-cell"} [claim-resource-btn] [lock-resource-btn]]])))
