@@ -10,15 +10,6 @@ module.exports.jenkinsInfo = (event, context, callback) => {
     jenkins.info((err, { jobs }) => {
         if (err) throw err;
         const filteredResources = jobs.filter(({ name }) => urlTest.test(name));
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify({
-                filteredResources,
-                input: event,
-            }),
-        };
-        callback(null, response);
+        callback(null, filteredResources); // uses lambda proxy integration
     });
-    // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-    // callback(null, { message: 'Go Serverless v1.0! Your function executed successfully!', event });
 };
