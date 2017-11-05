@@ -1,19 +1,32 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset='utf-8'>
-    <!--<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="vendor/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" href="vendor/css/re-com.css">
     <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.1.0/font-awesome-animation.min.css">
     <link href="css/site.css" rel="stylesheet" type="text/css">
-  </head>
-  <body>
-    <div id="app"></div>
-    <script src="js/compiled/app.js"></script>
-    <script>gloo_resources.core.init();</script>
-  </body>
+</head>
+<body>
+<div id="app"></div>
+<script src="js/compiled/app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyBqb3R0mER0oSVS31B5RvhNV7b8pl1OT4s",
+        authDomain: "glooresourceallocation.firebaseapp.com",
+        databaseURL: "https://glooresourceallocation.firebaseio.com",
+        projectId: "glooresourceallocation",
+        storageBucket: "glooresourceallocation.appspot.com",
+        messagingSenderId: "59532946679"
+    };
+    firebase.initializeApp(config);
+</script>
+<script>gloo_resources.core.init();</script>
+</body>
 </html>

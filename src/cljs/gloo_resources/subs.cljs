@@ -21,3 +21,8 @@
   :allResources
   (fn [db _]
     (:allResources db)))
+
+(rf/reg-sub
+  :allJenkinsResources
+  (fn [db _]
+    (:allJenkinsResources db)))
