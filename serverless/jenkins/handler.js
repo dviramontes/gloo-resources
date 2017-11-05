@@ -25,7 +25,8 @@ module.exports.jenkinsInfo = (event, context, callback) => {
                     resource.type = 'ui';
                 }
                 return {[resource.name]: resource};
-            });
+            })
+            .reduce((a, b) => Object.assign(a, b), {});
         return callback(null, filteredResources); // uses lambda proxy integration
     });
 };
