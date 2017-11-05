@@ -8,7 +8,7 @@ module.exports.jenkinsInfo = (event, context, callback) => {
         crumbIssuer: true
     });
     jenkins.info((err, { jobs }) => {
-        if (err) throw err;
+        if (err) throw new Error(err);
         const filteredResources = jobs.filter(({ name }) => urlTest.test(name));
         callback(null, filteredResources); // uses lambda proxy integration
     });
