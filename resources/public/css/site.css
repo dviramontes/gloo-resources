@@ -222,3 +222,16 @@ body {
 .actions-cell a {
   margin: auto 0.5em;
 }
+.status-dot {
+  text-align: center;
+  width: 100%;
+}
+.blue {
+  color: blue;
+}
+.red {
+  color: red;
+}
+.blue_anime {
+  color: blue;
+}

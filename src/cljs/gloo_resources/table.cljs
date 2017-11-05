@@ -3,19 +3,7 @@
             [reagent.core :as reagent]
             [gloo-resources.date-picker :refer [date-picker]]))
 
-(def query "
-  {
-    allResources {
-      url
-      name
-      branch
-      endDate
-      engineer
-      startDate
-    }
-  }")
-
-(def db-key :allResources)
+(def db-key :allJenkinsResources)
 
 (defn claim-resource-btn []
   [:a {:class "f6 link dim ba ph3 pv2 mb2 dib hot-pink"}
@@ -30,7 +18,7 @@
    [:i.fa.fa-pencil]])
 
 (defn row [contents]
-  (let [{:keys [name engineer branch startDate endDate url]} contents]
+  (let [{:keys [name engineer branch startDate endDate url color]} contents]
     (fn []
       [:tr {:class "resource-row striped--light-gray"}
        [:td {:class "pv2 ph3"} [edit-resource-btn]]
@@ -40,14 +28,13 @@
        [:td {:class "pv2 ph3"} [date-picker]]
        [:td {:class "pv2 ph3"} [date-picker]]
        [:td {:class "pv2 ph3"} [:a {:href url :target "_blank"} url]]
-       [:td {:class "pv2 ph3"} "..."]
+       [:td {:class "pv2 ph3"} [:i {:class (str "fa fa-circle status-dot " color)}]]
        [:td {:class "pv2 ph3 actions-cell"} [claim-resource-btn] [lock-resource-btn]]])))
 
 (defn table []
-  (rf/dispatch [:fetch-graph db-key query])
+  (rf/dispatch [:fetch-jenkins-info])
   (let [resources-subs (rf/subscribe [db-key])]
     (fn []
-      (prn @resources-subs)
       [:div#table-container
        [:table {:class "collapse ba br2 b--black-10 pv2 ph3"}
         [:tbody
@@ -62,10 +49,4 @@
           [:th {:class "tr f6 ttu fw6 pv2 ph3 ba"} "STATUS"]
           [:th {:class "tr f6 ttu fw6 pv2 ph3 ba"} "ACTIONS"]]
          (for [r @resources-subs]
-           ^{:key (gensym "row-")}
-           [row r])]]])))
-
-
-
-
-
+           ^{:key (gensym "row-")} [row r])]]])))
