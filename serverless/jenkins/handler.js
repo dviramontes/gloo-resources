@@ -22,9 +22,9 @@ module.exports.jenkinsInfo = (event, context, callback) => {
                 if (qaTest.test(name)) {
                     resource.type = 'qa';
                 } else if (reTest.test(name)) {
-                    resource.type = 're';
+                    resource.type = 'restricted';
                 } else {
-                    resource.type = 'ui';
+                    resource.type = 'uitest';
                 }
                 return {[resource.name]: resource};
             })
