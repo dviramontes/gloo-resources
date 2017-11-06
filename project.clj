@@ -15,7 +15,8 @@
                  [cljsjs/moment "2.17.1-1"]
                  [cljsjs/pikaday "1.5.1-2"]
                  [adzerk/env "0.4.0"]
-                 [ring "1.4.0"]]
+                 [ring "1.4.0"]
+                 [cljsjs/firebase "4.4.0-0"]]
 
   :plugins [[lein-cljsbuild "1.1.5"]
             [lein-less "1.7.5"]]

@@ -18,15 +18,16 @@
    [:i.fa.fa-pencil]])
 
 (defn row [contents]
-  (let [{:keys [name engineer branch startDate endDate url color]} contents]
+  (let [{:keys [name engineer branch startDate endDate url color type ordinal]} contents
+        resource-name (str type ordinal)]
     (fn []
       [:tr {:class "resource-row striped--light-gray"}
        [:td {:class "pv2 ph3"} [edit-resource-btn]]
        [:td {:class "pv2 ph3 light-purple"} name]
        [:td {:class "pv2 ph3 purple"} [:b engineer]]
        [:td {:class "pv2 ph3 light-green b-navy"} branch]
-       [:td {:class "pv2 ph3"} [date-picker]]
-       [:td {:class "pv2 ph3"} [date-picker]]
+       [:td {:class "pv2 ph3"} [date-picker resource-name :start-time]]
+       [:td {:class "pv2 ph3"} [date-picker resource-name :end-time]]
        [:td {:class "pv2 ph3"} [:a {:href url :target "_blank"} url]]
        [:td {:class "pv2 ph3"} [:i {:class (str "fa fa-circle status-dot " color)}]]
        [:td {:class "pv2 ph3 actions-cell"} [claim-resource-btn] [lock-resource-btn]]])))
