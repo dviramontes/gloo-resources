@@ -14,9 +14,11 @@ module.exports.jenkinsInfo = (event, context, callback) => {
     jenkins.info((err, {jobs}) => {
         if (err) throw new Error(err);
         const filteredResources = jobs
-            .filter(({name}) => matchAnyTest(name))
+            .filter(({ name }) => matchAnyTest(name))
             .map((resource) => {
-                const {name} = resource;
+                const { name } = resource;
+                const [ ordinal ] = name.split('.')[0].match(/\d+/);
+                resource.ordinal = +ordinal;
                 if (qaTest.test(name)) {
                     resource.type = 'qa';
                 } else if (reTest.test(name)) {
