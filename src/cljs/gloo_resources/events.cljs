@@ -14,14 +14,14 @@
 (def jenkins-info-endpoint "https://7q3hx47nji.execute-api.us-east-1.amazonaws.com/dev")
 
 (rf/reg-event-db
- :initialize-db
- (fn  [_ _]
-   db/default-db))
+  :initialize-db
+  (fn [_ _]
+    db/default-db))
 
 (rf/reg-event-db
- :set-active-panel
- (fn [db [_ active-panel]]
-   (assoc db :active-panel active-panel)))
+  :set-active-panel
+  (fn [db [_ active-panel]]
+    (assoc db :active-panel active-panel)))
 
 (rf/reg-event-fx
   :fetch-graph
@@ -51,6 +51,10 @@
 
 (rf/reg-event-db
   :fetch-jenkins-info-success
-  (fn [db [_  res]]
-    (let [sorted (vals res)]
-      (assoc db :allJenkinsResources sorted))))
+  (fn [db [_ res]]
+    (assoc db :allJenkinsResources (vals res))))
+
+(rf/reg-event-db
+  :update-row-state
+  (fn [db [_ ref values]]
+    (assoc db ref values)))

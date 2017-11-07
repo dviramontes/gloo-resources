@@ -1,7 +1,8 @@
 (ns gloo-resources.table
   (:require [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [gloo-resources.date-picker :refer [date-picker]]))
+            [gloo-resources.date-picker :refer [date-picker]]
+            [gloo-resources.firebase :as fb]))
 
 (def db-key :allJenkinsResources)
 
@@ -19,8 +20,14 @@
 
 (defn row [contents]
   (let [{:keys [name engineer branch startDate endDate url color type ordinal]} contents
-        resource-name (str type ordinal)]
+        resource-name (str type ordinal)
+        resource-name-key (keyword resource-name)
+        read-ref (fb/path-str->db-ref (str "jenkins-info/" resource-name))]
     (fn []
+      (rf/reg-sub resource-name-key #(resource-name-key %))
+      (-> read-ref
+        (.on "value" #(let [snapshot->clj (-> % .val (js->clj :keywordize-keys true))]
+                       (rf/dispatch [:update-row-state resource-name-key snapshot->clj]))))
       [:tr {:class "resource-row striped--light-gray"}
        [:td {:class "pv2 ph3"} [edit-resource-btn]]
        [:td {:class "pv2 ph3 light-purple"} name]

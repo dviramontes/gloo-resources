@@ -217,7 +217,7 @@ body {
   transition: background-color 0.15s ease-in;
 }
 .b-navy {
-  background-color: navy;
+  background-color: #000075;
 }
 .actions-cell a {
   margin: auto 0.5em;
