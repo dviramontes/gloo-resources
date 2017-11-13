@@ -2,26 +2,30 @@
   (:require [re-frame.core :as rf]
             [cljsjs.auth0-lock]
             [gloo-resources.table :refer [table]]
+            [gloo-resources.firebase :as fb]
             [re-com.core :as re-com]))
 
 (def lock
   (new js/Auth0Lock
        "UF8w9E28EPVedKxIzLmW1XiSnd9Dupxq"
        "pl-switchboard.auth0.com"
-       (clj->js {:auth {:redirect false}
+       (clj->js {:auth  {:redirect false}
                  :scope "openid profile"})))
 
-(def gloo-dev-resources-alloc-token "gloo-dev-resources-alloc-token")
+(defonce gloo-dev-resources-alloc-token "gloo-dev-resources-alloc-token")
 
 (let []
   (.on lock
        "authenticated"
-       (fn [profile]
-         (let [token (aget profile "accessToken")]
-           (prn profile)
-           (js/window.localStorage.setItem
-             gloo-dev-resources-alloc-token
-             token)))))
+       (fn [res]
+         (let [token (aget res "accessToken")]
+           (prn token)
+           (-> fb/auth
+               (.signInWithCustomToken token)
+               (.catch (fn [fb-error]
+                         (js/console.log fb-error))))
+           (js/window.localStorage.setItem gloo-dev-resources-alloc-token token)))))
+
 
 (defn title []
   [re-com/title
@@ -29,10 +33,8 @@
    :level :level1])
 
 (defn login-btn []
-  [:a
-   {:class "f6 link dim br1 ba bw2 ph3 pv2 mb2 dib light-purple"
-    :on-click #(.show lock)}
-   "Log in"])
+  [:a {:class    "f6 link dim br1 ba bw2 ph3 pv2 mb2 dib light-purple"
+       :on-click #(.show lock)} "Log in"])
 
 (defn home-panel []
   [re-com/v-box
@@ -76,7 +78,7 @@
 
 (defn main-panel []
   (let [active-panel (rf/subscribe [:active-panel])]
-    (when-let [token (js/window.localStorage.getItem "gloo-dev-resources-alloc-token")]
+    (when-let [token (js/window.localStorage.getItem gloo-dev-resources-alloc-token)]
       (rf/dispatch [:fetch-graph :allUsers allUsersQuery token]))
     (fn []
       [re-com/v-box

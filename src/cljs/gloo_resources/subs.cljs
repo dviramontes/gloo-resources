@@ -15,7 +15,7 @@
 (rf/reg-sub
   :autheticated?
   (fn [db _]
-    (::auth0-authenticated? db)))
+    (:auth0-authenticated? db)))
 
 (rf/reg-sub
   :allResources

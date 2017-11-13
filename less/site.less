@@ -1,5 +1,8 @@
 @import "_pikaday";
 
+// vars
+@yellow: rgb(249, 221, 133);
+
 body {
   margin: 2em;
   color: #000000;
@@ -17,6 +20,10 @@ body {
 
 .b-navy {
   background-color: rgba(0, 0, 117, 1);
+}
+
+.b-yellow {
+  background-color: @yellow;
 }
 
 .actions-cell {
@@ -41,4 +48,33 @@ body {
 // TODO: animate
 .blue_anime {
   color: blue;
+}
+
+@keyframes border-pulsate {
+  0%   {
+    border-color: rgba(249, 221, 133, 1);
+    background-color: @yellow;
+  }
+  50% {
+    border-color: rgba(249, 221, 133, 0.5);
+    background-color: @yellow;
+  }
+  100% {
+    border-color: rgba(249, 221, 133, 0);
+    background-color: @yellow;
+  }
+}
+
+td.animate {
+  box-sizing: border-box;
+  border: 0.5rem solid rgb(249, 221, 133);
+  animation: border-pulsate 2s;
+}
+
+#table {
+  td, td.animate {
+    border: 0.15rem solid;
+    border-color: inherit;
+    border-bottom: none;
+  }
 }

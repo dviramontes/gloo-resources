@@ -22,3 +22,5 @@
 	firebase-db-ref, or to the first argument if called with two args."
   ([rel-path] (path-str->db-ref firebase-db-ref rel-path))
   ([db-ref rel-path] (.child db-ref rel-path)))
+
+(def auth (.auth firebase-app))

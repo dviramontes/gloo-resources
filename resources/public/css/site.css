@@ -219,6 +219,9 @@ body {
 .b-navy {
   background-color: #000075;
 }
+.b-yellow {
+  background-color: #f9dd85;
+}
 .actions-cell a {
   margin: auto 0.5em;
 }
@@ -234,4 +237,29 @@ body {
 }
 .blue_anime {
   color: blue;
+}
+@keyframes border-pulsate {
+  0% {
+    border-color: #f9dd85;
+    background-color: #f9dd85;
+  }
+  50% {
+    border-color: rgba(249, 221, 133, 0.5);
+    background-color: #f9dd85;
+  }
+  100% {
+    border-color: rgba(249, 221, 133, 0);
+    background-color: #f9dd85;
+  }
+}
+td.animate {
+  box-sizing: border-box;
+  border: 0.5rem solid #f9dd85;
+  animation: border-pulsate 2s;
+}
+#table td,
+#table td.animate {
+  border: 0.15rem solid;
+  border-color: inherit;
+  border-bottom: none;
 }
