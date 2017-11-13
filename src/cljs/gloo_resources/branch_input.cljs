@@ -3,19 +3,19 @@
             [gloo-resources.firebase :as fb]
             [reagent.core :as reagent]))
 
-(defn- input-comp [value resource callback]
-  (let [write-ref-path (fb/path-str->db-ref (str "jenkins-info/" resource "/branch"))]
-    [:input {:type        "text"
-             :class       "input-reset ba b--black-20 pa2 mb2 db w-100"
-             :placeholder "name"
-             :value       value
-             :on-blur     #(-> write-ref-path (.set value))
-             :on-change   #(callback (-> % .-target .-value))}]))
+(defn- input-comp [value fb-write-path callback]
+  [:input {:type        "text"
+           :class       "input-reset ba b--black-20 pa2 mb2 db w-100"
+           :placeholder "name"
+           :value       value
+           :on-blur     #(-> fb-write-path (.set value))
+           :on-change   #(callback (-> % .-target .-value))}])
 
 (defn branch-input [resource]
   (let [resource-sub (rf/subscribe [(keyword resource)])
+        fb-write-path (fb/path-str->db-ref (str "jenkins-info/" resource "/branch"))
         state (reagent/atom nil)]
     (fn []
       (let [{branch :branch} @resource-sub
             callback #(reset! state %)]
-        [input-comp (or @state branch) resource callback]))))
+        [input-comp (or @state branch) fb-write-path callback]))))
