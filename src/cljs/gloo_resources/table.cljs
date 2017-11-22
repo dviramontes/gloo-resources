@@ -32,9 +32,9 @@
           (.on "value" #(let [snapshot->clj (-> % .val (js->clj :keywordize-keys true))]
                           (rf/dispatch [:update-row-state resource-name-key snapshot->clj]))))
       [:tr {:class "resource-row striped--light-gray"}
-       [:td {:class "pv2 ph3 animate"} [edit-btn]]
-       [:td {:class "pv2 ph3 light-purple"} [:a {:href url :target "_blank"} url]]
-       [:td {:class "pv2 ph3 purple b-animate b-red"} [engineer-input resource-name]]
+       [:td {:class "pv2 ph3"} [edit-btn]]
+       [:td {:class "pv2 ph3 light-purple animate"} [:a {:href url :target "_blank"} url]]
+       [:td {:class "pv2 ph3 purple b-red"} [engineer-input resource-name]]
        [:td {:class "pv2 ph3"} [branch-input resource-name]]
        [:td {:class "pv2 ph3"} [date-picker resource-name :start-time]]
        [:td {:class "pv2 ph3"} [date-picker resource-name :end-time]]
@@ -49,7 +49,7 @@
        [:table#table {:class "collapse ba br2 b--black-10 pv2 ph3"}
         [:tbody
          [:tr {:class "striped--light-gray ba bw2"}
-          [:th {:class "pv2 ph3 tl f6 fw6 ttu ba "} "_"]
+          [:th {:class "pv2 ph3 tl f6 fw6 ttu ba"} "_"]
           [:th {:class "pv2 ph3 tl f6 fw6 ttu ba light-purple"} "NAME"]
           [:th {:class "pv2 ph3 tl f6 fw6 ttu ba purple b-yellow"} "ENGINEER"]
           [:th {:class "tr f6 ttu fw6 pv2 ph3 ba light-green b-navy"} "BRANCH"]
