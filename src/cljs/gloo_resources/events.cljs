@@ -47,12 +47,19 @@
      :http-xhrio {:method          :get
                   :uri             jenkins-info-endpoint
                   :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success      [:fetch-jenkins-info-success]}}))
+                  :on-success      [:fetch-jenkins-info-success]
+                  :on-failure      [:fetch-jenkins-info-failure]}}))
 
 (rf/reg-event-db
   :fetch-jenkins-info-success
   (fn [db [_ res]]
     (assoc db :allJenkinsResources (vals res))))
+
+(rf/reg-event-db
+  :fetch-jenkins-info-failure
+  (fn [db [_ res]]
+    (assoc db :on-app-failure {:show? true
+                               :msg :fetch-jenkins-info-failure})))
 
 (rf/reg-event-db
   :update-row-state

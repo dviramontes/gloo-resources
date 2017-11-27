@@ -26,3 +26,8 @@
   :allJenkinsResources
   (fn [db _]
     (:allJenkinsResources db)))
+
+(rf/reg-sub
+  :on-app-failure
+  (fn [db _]
+    (:on-app-failure db)))

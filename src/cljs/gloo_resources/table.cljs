@@ -3,6 +3,7 @@
             [reagent.core :as reagent]
             [gloo-resources.date-picker :refer [date-picker]]
             [gloo-resources.text-input :refer [text-input]]
+            [gloo-resources.error-component :refer [error-component]]
             [gloo-resources.firebase :as fb]))
 
 (def db-key :allJenkinsResources)
@@ -17,7 +18,7 @@
 
 (defn row [contents]
   (let [{:keys [name engineer startDate endDate color type ordinal]} contents
-        url (str "http://" name) ;; urls coming from jenkins point to jenkins pages not the resource's URL
+        url (str "http://" name)                                ;; urls coming from jenkins point to jenkins pages not the resource's URL
         resource-name (str type ordinal)
         resource-name-key (keyword resource-name)
         read-ref (fb/path-str->db-ref (str "jenkins-info/" resource-name))]
@@ -48,6 +49,7 @@
   (let [resources-subs (rf/subscribe [db-key])]
     (fn []
       [:div#table-container
+       [error-component]
        [:table#table.collapse.ba.br2.b--black-10.pv2.ph3
         [:tbody
          [:tr.striped--light-gray.ba.bw2

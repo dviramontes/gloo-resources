@@ -16,7 +16,9 @@
                  [cljsjs/pikaday "1.5.1-2"]
                  [adzerk/env "0.4.0"]
                  [ring "1.4.0"]
-                 [cljsjs/firebase "4.4.0-0"]]
+                 [cljsjs/firebase "4.4.0-0"]
+                 [cljsjs/toastr "2.1.2-0"]
+                 [im.chit/purnam "0.5.2"]]
 
   :plugins [[lein-cljsbuild "1.1.5"]
             [lein-less "1.7.5"]]
