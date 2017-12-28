@@ -5,3 +5,4 @@
 out
 .idea
 gloo-resources.iml
+serverless/jenkins/deploy.out
