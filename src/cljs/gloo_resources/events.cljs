@@ -4,7 +4,8 @@
             [day8.re-frame.http-fx]
             [gloo-resources.db :as db]))
 
-(def jenkins-info-endpoint "https://7q3hx47nji.execute-api.us-east-1.amazonaws.com/dev")
+(def jenkins-info-endpoint
+  "https://dsmfauznd3.execute-api.us-east-1.amazonaws.com/prod/jenkins-dev-jenkinsInfo")
 
 (rf/reg-event-db
   :initialize-db
