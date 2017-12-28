@@ -72,12 +72,8 @@
     :about-panel [about-panel]
     [:div]))
 
-(def allUsersQuery "{ allUsers { id } }")
-
 (defn main-panel []
   (let [active-panel (rf/subscribe [:active-panel])]
-    (when-let [token (js/window.localStorage.getItem gloo-dev-resources-alloc-token)]
-      (rf/dispatch [:fetch-graph :allUsers allUsersQuery token]))
     (fn []
       [re-com/v-box
        :height "100%"

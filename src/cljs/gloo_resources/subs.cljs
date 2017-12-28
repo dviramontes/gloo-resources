@@ -18,11 +18,6 @@
     (:auth0-authenticated? db)))
 
 (rf/reg-sub
-  :allResources
-  (fn [db _]
-    (:allResources db)))
-
-(rf/reg-sub
   :allJenkinsResources
   (fn [db _]
     (:allJenkinsResources db)))
