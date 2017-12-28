@@ -66,8 +66,6 @@
    :gap "1em"
    :children [[about-title] [link-to-home-page]]])
 
-;; main
-
 (defn- panels [panel-name]
   (case panel-name
     :home-panel [home-panel]

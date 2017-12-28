@@ -1,9 +1,8 @@
 (ns gloo-resources.table
   (:require [re-frame.core :as rf]
-            [reagent.core :as reagent]
-            [gloo-resources.date-picker :refer [date-picker]]
-            [gloo-resources.text-input :refer [text-input]]
-            [gloo-resources.error-component :refer [error-component]]
+            [gloo-resources.components.date-picker :refer [date-picker]]
+            [gloo-resources.components.text-input :refer [text-input]]
+            [gloo-resources.components.error :refer [error]]
             [gloo-resources.firebase :as fb]))
 
 (def db-key :allJenkinsResources)
@@ -49,7 +48,7 @@
   (let [resources-subs (rf/subscribe [db-key])]
     (fn []
       [:div#table-container
-       [error-component]
+       [error]
        [:table#table.collapse.ba.br2.b--black-10.pv2.ph3
         [:tbody
          [:tr.striped--light-gray.ba.bw2

@@ -1,4 +1,4 @@
-(ns gloo-resources.date-picker
+(ns gloo-resources.components.date-picker
   (:require cljsjs.pikaday
             cljsjs.moment
             [re-frame.core :as rf]

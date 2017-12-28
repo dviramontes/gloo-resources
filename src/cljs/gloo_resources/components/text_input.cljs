@@ -1,4 +1,4 @@
-(ns gloo-resources.text-input
+(ns gloo-resources.components.text-input
   (:require [re-frame.core :as rf]
             [gloo-resources.firebase :as fb]
             [reagent.core :as reagent]))
