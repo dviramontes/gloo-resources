@@ -34,7 +34,7 @@
 
 (rf/reg-event-db
   :fetch-jenkins-info-failure
-  (fn [db [_ res]]
+  (fn [db _]
     (assoc db :on-app-failure {:show? true
                                :msg "fetching jenkins-info failed"})))
 
