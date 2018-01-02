@@ -18,11 +18,16 @@
     (:auth0-authenticated? db)))
 
 (rf/reg-sub
-  :allJenkinsResources
+  :all-jenkins-resources
   (fn [db _]
-    (:allJenkinsResources db)))
+    (:all-jenkins-resources db)))
 
 (rf/reg-sub
   :on-app-failure
   (fn [db _]
     (:on-app-failure db)))
+
+(rf/reg-sub
+  :sort-by-type
+  (fn [db _]
+    (:sort-by-type db)))

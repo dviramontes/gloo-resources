@@ -1,11 +1,8 @@
-(ns gloo-resources.table
+(ns gloo-resources.components.table
   (:require [re-frame.core :as rf]
             [gloo-resources.components.date-picker :refer [date-picker]]
             [gloo-resources.components.text-input :refer [text-input]]
-            [gloo-resources.components.error :refer [error]]
-            [gloo-resources.firebase :as fb]))
-
-(def db-key :allJenkinsResources)
+            [gloo-resources.components.error :refer [error]]))
 
 (defn launch-btn []
   [:a.f6link.dim.ba.ph3.pv2.mb2.dib.hot-pink
@@ -15,37 +12,31 @@
   [:a.f6.link.dim.ba.ph3.pv2.mb2.dib.dark-pink.b-animate
    [:i.fa.fa-pencil]])
 
-(defn row [contents]
-  (let [{:keys [name engineer startDate endDate color type ordinal]} contents
-        url (str "http://" name)                                ;; urls coming from jenkins point to jenkins pages not the resource's URL
-        resource-name (str type ordinal)
-        resource-name-key (keyword resource-name)
-        read-ref (fb/path-str->db-ref (str "jenkins-info/" resource-name))]
+(defn row [[resource-key values]]
+  (let [resource-str (name resource-key)
+        {:keys [name color]} values
+        url (str "http://" name)]
     (fn []
-      (rf/reg-sub resource-name-key #(resource-name-key %))
-      (-> read-ref
-          (.on "value" #(let [snapshot->clj (-> % .val (js->clj :keywordize-keys true))]
-                          (rf/dispatch [:update-row-state resource-name-key snapshot->clj]))))
       [:tr.resource-row.striped--light-gray
        [:td.pv2.ph3
         [edit-btn]]
        [:td.pv2.ph3.light-purple
         [:a {:href url :target "_blank"} url]]
        [:td.pv2.ph3.purple.b-red
-        [text-input :engineer resource-name]]
+        [text-input :engineer resource-str]]
        [:td.pv2.ph3
-        [text-input :branch resource-name]]
+        [text-input :branch resource-str]]
        [:td.pv2.ph3
-        [date-picker resource-name :start-time]]
+        [date-picker resource-str :start-time]]
        [:td.pv2.ph3
-        [date-picker resource-name :end-time]]
+        [date-picker resource-str :end-time]]
        [:td.pv2.ph3
         [:i.fa.fa-circle.status-dot {:class color}]]
        [:td.pv2.ph3.actions-cell [launch-btn]]])))
 
 (defn table []
   (rf/dispatch [:fetch-jenkins-info])
-  (let [resources-subs (rf/subscribe [db-key])]
+  (let [resources-subs (rf/subscribe [:all-jenkins-resources])]
     (fn []
       [:div#table-container
        [error]
@@ -61,4 +52,5 @@
           [:th.tr.f6.ttu.fw6.pv2.ph3.ba "STATUS"]
           [:th.tr.f6.ttu.fw6.pv2.ph3.ba "ACTIONS"]]
          (for [r @resources-subs]
-           ^{:key (gensym "row-")} [row r])]]])))
+           ^{:key (gensym "row-")}
+           [row r])]]])))

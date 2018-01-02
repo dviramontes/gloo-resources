@@ -1,7 +1,7 @@
 (ns gloo-resources.views
   (:require [re-frame.core :as rf]
             [cljsjs.auth0-lock]
-            [gloo-resources.table :refer [table]]
+            [gloo-resources.components.table :refer [table]]
             [gloo-resources.firebase :as fb]
             [re-com.core :as re-com]))
 
@@ -33,8 +33,19 @@
    :level :level1])
 
 (defn login-btn []
-  [:a {:class    "f6 link dim br1 ba bw2 ph3 pv2 mb2 dib light-purple"
-       :on-click #(.show lock)} "Log in"])
+  [:a {:class    "f6 link dim br1 ba bw2 ph3 pv2 mb2 dib light-purple bg-black-90"
+       :on-click #(.show lock)} "LOG-IN"])
+
+(defn sort-by-type-btn [type]
+  [:a {:class    "f6 link dim br1 ba bw2 ph3 pv2 mb2 dib light-green bg-black-90"
+       :on-click #(rf/dispatch [:sort-by-type type])}
+   (-> type name .toUpperCase)])
+
+(defn button-row [& btns]
+  (fn []
+    [re-com/h-box
+     :gap "1em"
+     :children (apply vector btns)]))
 
 (defn home-panel []
   [re-com/v-box
@@ -44,7 +55,13 @@
                :child [title]]
               [re-com/box
                :class "fl center"
-               :child [login-btn]]
+               :child [button-row [login-btn]]]
+              [re-com/box
+               :class "fl center"
+               :child [button-row [sort-by-type-btn :all]
+                                  [sort-by-type-btn :qa]
+                                  [sort-by-type-btn :ui-test]
+                                  [sort-by-type-btn :restricted]]]
               [re-com/box
                :class "fl center"
                :child [table]]]])
