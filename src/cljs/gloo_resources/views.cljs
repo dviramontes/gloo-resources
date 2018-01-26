@@ -19,11 +19,7 @@
        "authenticated"
        (fn [res]
          (let [token (aget res "accessToken")]
-           (prn token)
-           (-> fb/auth
-               (.signInWithCustomToken token)
-               (.catch (fn [fb-error]
-                         (js/console.log fb-error))))
+           (rf/dispatch [:autheticated! true])
            (js/window.localStorage.setItem gloo-dev-resources-alloc-token token)))))
 
 
@@ -33,8 +29,14 @@
    :level :level1])
 
 (defn login-btn []
-  [:a {:class    "f6 link dim br1 ba bw2 ph3 pv2 mb2 dib light-purple bg-black-90"
-       :on-click #(.show lock)} "LOG-IN"])
+  (fn []
+    (if @(rf/subscribe [:autheticated?])
+      [:a {:class    "f6 link dim br1 ba bw2 ph3 pv2 mb2 dib light-red bg-black-90"
+           :on-click (fn []
+                       (js/window.localStorage.removeItem gloo-dev-resources-alloc-token)
+                       (rf/dispatch [:autheticated! false]))} "LOG-OUT"]
+      [:a {:class    "f6 link dim br1 ba bw2 ph3 pv2 mb2 dib light-purple bg-black-90"
+           :on-click #(.show lock)} "LOG-IN"])))
 
 (defn sort-by-type-btn [type]
   [:a {:class    "f6 link dim br1 ba bw2 ph3 pv2 mb2 dib light-green bg-black-90"
@@ -92,6 +94,9 @@
 (defn main-panel []
   (let [active-panel (rf/subscribe [:active-panel])]
     (fn []
+      (when-let [token (js/window.localStorage.getItem gloo-dev-resources-alloc-token)]
+        (.getUserInfo lock token (fn [error profile]
+                                   (when profile (rf/dispatch [:autheticated! true])))))
       [re-com/v-box
        :height "100%"
        :children [[panels @active-panel]]])))

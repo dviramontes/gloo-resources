@@ -37,20 +37,22 @@
 (defn table []
   (rf/dispatch [:fetch-jenkins-info])
   (let [resources-subs (rf/subscribe [:all-jenkins-resources])]
+        ;; sort-by-type (rf/subscribe [:sort-by-type])]
     (fn []
-      [:div#table-container
-       [error]
-       [:table#table.collapse.ba.br2.b--black-10.pv2.ph3
-        [:tbody
-         [:tr.striped--light-gray.ba.bw2
-          [:th.pv2.ph3.tl.f6.fw6.ttu.ba "_"]
-          [:th.pv2.ph3.tl.f6.fw6.ttu.ba.light-purple "NAME"]
-          [:th.pv2.ph3.tl.f6.fw6.ttu.ba.purple.b-yellow "ENGINEER"]
-          [:th.tr.f6.ttu.fw6.pv2.ph3.ba.light-green.b-navy "BRANCH"]
-          [:th.tr.f6.ttu.fw6.pv2.ph3.ba "START_DATE"]
-          [:th.tr.f6.ttu.fw6.pv2.ph3.ba "END_DATE"]
-          [:th.tr.f6.ttu.fw6.pv2.ph3.ba "STATUS"]
-          [:th.tr.f6.ttu.fw6.pv2.ph3.ba "ACTIONS"]]
-         (for [r @resources-subs]
-           ^{:key (gensym "row-")}
-           [row r])]]])))
+      (when @(rf/subscribe [:autheticated?])
+        [:div#table-container
+         [error]
+         [:table#table.collapse.ba.br2.b--black-10.pv2.ph3
+          [:tbody
+           [:tr.striped--light-gray.ba.bw2
+            [:th.pv2.ph3.tl.f6.fw6.ttu.ba "_"]
+            [:th.pv2.ph3.tl.f6.fw6.ttu.ba.light-purple "NAME"]
+            [:th.pv2.ph3.tl.f6.fw6.ttu.ba.purple.b-yellow "ENGINEER"]
+            [:th.tl.f6.ttu.fw6.pv2.ph3.ba.light-green.b-navy "BRANCH"]
+            [:th.tl.f6.ttu.fw6.pv2.ph3.ba "START_DATE"]
+            [:th.tl.f6.ttu.fw6.pv2.ph3.ba "END_DATE"]
+            [:th.tl.f6.ttu.fw6.pv2.ph3.ba "STATUS"]
+            [:th.tl.f6.ttu.fw6.pv2.ph3.ba "ACTIONS"]]
+           (for [r @resources-subs]
+             ^{:key (gensym "row-")}
+             [row r])]]]))))

@@ -15,6 +15,11 @@
     db/default-db))
 
 (rf/reg-event-db
+  :autheticated!
+  (fn [db [_ auth?]]
+    (assoc db :auth0-authenticated? auth?)))
+
+(rf/reg-event-db
   :set-active-panel
   (fn [db [_ active-panel]]
     (assoc db :active-panel active-panel)))
